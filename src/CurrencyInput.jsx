@@ -1,4 +1,4 @@
-function CurrencyInput() {
+function CurrencyInput({ country, code }) {
 	return (
 		<section>
 			<h2>Location and Base Amount</h2>
@@ -20,8 +20,8 @@ function CurrencyInput() {
 				</form>
 				<div className="currency">
 					<h3>Currency Info</h3>
-					<p>Country: Canada</p>
-					<p>Currency: CAD</p>
+					<p>Country: {country}</p>
+					<p>Currency: {code}</p>
 				</div>
 			</div>
 		</section>
