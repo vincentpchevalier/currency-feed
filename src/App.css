@@ -26,12 +26,9 @@ ul {
 	}
 }
 
-#info {
+.info {
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 4rem;
-	padding: 1rem 2rem;
+	gap: 2rem;
 
 	& > * {
 		margin: 0;
@@ -40,15 +37,22 @@ ul {
 	& h2 {
 		flex-grow: 1;
 	}
+
+	& .currency {
+		padding: 0 1rem;
+		border: 0.1rem solid #ddd;
+		border-radius: 1rem;
+		flex-basis: 10rem;
+	}
 }
 
-#trackingForm {
+.info .form {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: stretch;
 	gap: 1.5rem;
-	flex-grow: 1;
+	flex-basis: 20rem;
 
 	& fieldset {
 		display: flex;
