@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 function CurrencyInput({ country, code }) {
 	return (
 		<section>
