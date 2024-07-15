@@ -7,7 +7,7 @@ const COUNTRY_API_URL = 'https://restcountries.com/v3.1/';
 const CURRENCY_API_URL = 'https://api.frankfurter.app/';
 
 function App() {
-	const [currencies, setCurrencies] = useState(null);
+	const [currencies, setCurrencies] = useState([]);
 	const [currencyCode, setCurrencyCode] = useState('');
 	const [country, setCountry] = useState('');
 	const [amount, setAmount] = useState('');
@@ -27,7 +27,7 @@ function App() {
 				const currenciesInfo = Object.keys(data).map((key) => ({
 					code: key,
 					currency: data[key],
-					exchange: '--',
+					exchange: 0,
 				}));
 				console.log(currenciesInfo);
 				setCurrencies(currenciesInfo);
@@ -66,6 +66,39 @@ function App() {
 			fetchCountry();
 		},
 		[country]
+	);
+
+	useEffect(
+		function () {
+			async function fetchExchangeRates() {
+				if (!currencyCode || !amount) return;
+				console.log('Fetching exchange rates');
+
+				const res = await fetch(
+					`${CURRENCY_API_URL}latest?amount=${amount}&from=${currencyCode}`
+				);
+				const data = await res.json();
+				console.log(data.rates);
+				const rates = Object.keys(data.rates).map((key) => ({
+					code: key,
+					exchange: data.rates[key],
+				}));
+				console.log(rates);
+				const updatedCurrencies = currencies.map((curr) => {
+					const rate = rates.find((rate) => rate.code === curr.code);
+
+					return {
+						...curr,
+						exchange: rate ? rate.exchange : 0,
+					};
+				});
+				console.log(updatedCurrencies);
+
+				setCurrencies(updatedCurrencies);
+			}
+			fetchExchangeRates();
+		},
+		[currencyCode, amount, currencies]
 	);
 
 	return (
