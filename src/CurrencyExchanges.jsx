@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Table from './Table';
 
 function CurrencyExchanges({ currencies }) {
