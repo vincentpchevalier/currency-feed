@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-function CurrencyInput({ country, code }) {
+function CurrencyInput({ amount, country, code, setCountry, setAmount }) {
 	return (
 		<section>
 			<h2>Location and Base Amount</h2>
@@ -11,13 +11,20 @@ function CurrencyInput({ country, code }) {
 							type="text"
 							name="country"
 							placeholder="What country are you in?"
+							value={country}
+							onChange={(ev) => setCountry(ev.target.value)}
 						/>
 					</fieldset>
 					<fieldset>
 						<label htmlFor="amount">Amount</label>
-						<input type="text" name="amount" placeholder="0.00" />
+						<input
+							type="text"
+							name="amount"
+							placeholder="0.00"
+							value={amount}
+							onChange={(ev) => setAmount(+ev.target.value)}
+						/>
 					</fieldset>
-					<button>Get Exchange</button>
 				</form>
 				<div className="currency">
 					<h3>Currency Info</h3>
