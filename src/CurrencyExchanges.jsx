@@ -1,10 +1,10 @@
 import Table from './Table';
 
-function CurrencyExchanges() {
+function CurrencyExchanges({ currencies }) {
 	return (
 		<div className="balanceSheetContainer">
 			<h2>Currency Exchange</h2>
-			<Table />
+			<Table data={currencies} />
 		</div>
 	);
 }

@@ -92,7 +92,7 @@ select {
 
 .table {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: 2fr 1fr 1fr;
 	width: 100%;
 	border: 0.1rem solid #ddd;
 	border-bottom: none;

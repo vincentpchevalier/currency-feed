@@ -27,6 +27,7 @@ function App() {
 				const currenciesInfo = Object.keys(data).map((key) => ({
 					code: key,
 					currency: data[key],
+					exchange: '--',
 				}));
 				console.log(currenciesInfo);
 				setCurrencies(currenciesInfo);
