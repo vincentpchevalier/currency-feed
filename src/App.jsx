@@ -7,10 +7,12 @@ const COUNTRY_API_URL = 'https://restcountries.com/v3.1/';
 const CURRENCY_API_URL = 'https://api.frankfurter.app/';
 
 function App() {
-	const [currencies, setCurrencies] = useState([]);
+	const [currencyInfo, setCurrencyInfo] = useState([]);
 	const [currencyCode, setCurrencyCode] = useState('');
 	const [country, setCountry] = useState('');
 	const [amount, setAmount] = useState('');
+	const [exchangeRates, setExchangeRates] = useState(null);
+	const [updatedCurrencyInfo, setUpdatedCurrencyInfo] = useState([]);
 
 	useEffect(function () {
 		async function fetchCurrencyInfo() {
@@ -22,15 +24,16 @@ function App() {
 
 				const data = await res.json();
 
-				console.log(data);
+				// console.log(data);
 
-				const currenciesInfo = Object.keys(data).map((key) => ({
+				const currData = Object.keys(data).map((key) => ({
 					code: key,
 					currency: data[key],
 					exchange: 0,
 				}));
-				console.log(currenciesInfo);
-				setCurrencies(currenciesInfo);
+				console.log(currData);
+				setCurrencyInfo(currData);
+				setUpdatedCurrencyInfo(currData);
 			} catch (err) {
 				console.warn(err);
 			} finally {
@@ -79,26 +82,35 @@ function App() {
 				);
 				const data = await res.json();
 				console.log(data.rates);
-				const rates = Object.keys(data.rates).map((key) => ({
-					code: key,
-					exchange: data.rates[key],
-				}));
-				console.log(rates);
-				const updatedCurrencies = currencies.map((curr) => {
-					const rate = rates.find((rate) => rate.code === curr.code);
+				// const rates = Object.keys(data.rates).map((key) => ({
+				// 	code: key,
+				// 	exchange: data.rates[key],
+				// }));
+				// console.log(rates);
 
-					return {
-						...curr,
-						exchange: rate ? rate.exchange : 0,
-					};
-				});
-				console.log(updatedCurrencies);
-
-				setCurrencies(updatedCurrencies);
+				setExchangeRates(data.rates);
 			}
 			fetchExchangeRates();
 		},
-		[currencyCode, amount, currencies]
+		[currencyCode, amount]
+	);
+
+	useEffect(
+		function () {
+			if (!exchangeRates) return;
+			console.log(exchangeRates);
+
+			const updatedCurrencies = currencyInfo.map((curr) => {
+				const exchange = exchangeRates[curr.code] || amount;
+				return {
+					...curr,
+					exchange,
+				};
+			});
+			console.log(updatedCurrencies);
+			setUpdatedCurrencyInfo(updatedCurrencies);
+		},
+		[exchangeRates, currencyInfo, amount]
 	);
 
 	return (
@@ -111,7 +123,7 @@ function App() {
 				setCountry={setCountry}
 				setAmount={setAmount}
 			/>
-			<CurrencyExchanges currencies={currencies} />
+			<CurrencyExchanges currencies={updatedCurrencyInfo} />
 		</>
 	);
 }
