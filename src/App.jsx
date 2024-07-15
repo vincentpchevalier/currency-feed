@@ -4,11 +4,40 @@ import CurrencyExchanges from './CurrencyExchanges';
 import CurrencyInput from './CurrencyInput';
 
 const COUNTRY_API_URL = 'https://restcountries.com/v3.1/';
+const CURRENCY_API_URL = 'https://api.frankfurter.app/';
 
 function App() {
+	const [currencies, setCurrencies] = useState(null);
 	const [currencyCode, setCurrencyCode] = useState('');
 	const [country, setCountry] = useState('');
 	const [amount, setAmount] = useState('');
+
+	useEffect(function () {
+		async function fetchCurrencyInfo() {
+			try {
+				const res = await fetch(`${CURRENCY_API_URL}currencies`);
+
+				if (!res.ok)
+					throw new Error('Something went wrong fetching the currencies.');
+
+				const data = await res.json();
+
+				console.log(data);
+
+				const currenciesInfo = Object.keys(data).map((key) => ({
+					code: key,
+					currency: data[key],
+				}));
+				console.log(currenciesInfo);
+				setCurrencies(currenciesInfo);
+			} catch (err) {
+				console.warn(err);
+			} finally {
+				//
+			}
+		}
+		fetchCurrencyInfo();
+	}, []);
 
 	useEffect(
 		function () {
@@ -48,7 +77,7 @@ function App() {
 				setCountry={setCountry}
 				setAmount={setAmount}
 			/>
-			<CurrencyExchanges />
+			<CurrencyExchanges currencies={currencies} />
 		</>
 	);
 }
