@@ -79,6 +79,7 @@ function App() {
 
 	useEffect(
 		function () {
+			let timerId;
 			async function fetchExchangeRates() {
 				if (!currencyCode || !amount) return;
 				console.log('Fetching exchange rates');
@@ -100,14 +101,17 @@ function App() {
 					const data = await res.json();
 					console.log(data.rates);
 
-					setExchangeRates(data.rates);
-					setIsLoading(false);
+					timerId = setTimeout(() => {
+						setExchangeRates(data.rates);
+						setIsLoading(false);
+					}, 1000);
 				} catch (err) {
 					setError(err.message);
 					setIsLoading(false);
 				}
 			}
 			fetchExchangeRates();
+			return () => clearTimeout(timerId);
 		},
 		[currencyCode, amount]
 	);
