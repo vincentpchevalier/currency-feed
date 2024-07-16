@@ -4,7 +4,7 @@ import Row from './Row';
 
 import './Table.css';
 
-function Table() {
+function Table({ currencyInfo }) {
 	return (
 		<ul className="table">
 			<Row>
@@ -12,12 +12,16 @@ function Table() {
 				<Cell classModifier="header">Code</Cell>
 				<Cell classModifier="header">Value</Cell>
 			</Row>
-
-			<Row key={0}>
-				<Cell classModifier="">Canadian Dollar</Cell>
-				<Cell classModifier="">CAD</Cell>
-				<Cell classModifier="">0.00</Cell>
-			</Row>
+			{currencyInfo.map((item) => {
+				// console.log(item);
+				return (
+					<Row key={item.code}>
+						<Cell classModifier="">{item.currency}</Cell>
+						<Cell classModifier="">{item.code}</Cell>
+						<Cell classModifier="">{item.exchange}</Cell>
+					</Row>
+				);
+			})}
 		</ul>
 	);
 }
