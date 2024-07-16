@@ -13,7 +13,7 @@ function App() {
 	const [amount, setAmount] = useState('');
 	const [exchangeRates, setExchangeRates] = useState(null);
 	const [updatedCurrencyInfo, setUpdatedCurrencyInfo] = useState([]);
-	const [isLoading, setIsLoading] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
 
 	useEffect(function () {
@@ -37,8 +37,6 @@ function App() {
 				setUpdatedCurrencyInfo(currData);
 			} catch (err) {
 				setError(err.message);
-			} finally {
-				//
 			}
 		}
 		fetchCurrencyInfo();
@@ -72,8 +70,6 @@ function App() {
 					setCurrencyCode(currencyCode);
 				} catch (err) {
 					setError(err.message);
-				} finally {
-					// setIsLoading()
 				}
 			}
 			fetchCountry();
@@ -87,6 +83,8 @@ function App() {
 				if (!currencyCode || !amount) return;
 				console.log('Fetching exchange rates');
 				try {
+					setIsLoading(true);
+
 					const res = await fetch(
 						`${CURRENCY_API_URL}latest?amount=${amount}&from=${currencyCode}`
 					);
@@ -103,10 +101,10 @@ function App() {
 					console.log(data.rates);
 
 					setExchangeRates(data.rates);
+					setIsLoading(false);
 				} catch (err) {
 					setError(err.message);
-				} finally {
-					//
+					setIsLoading(false);
 				}
 			}
 			fetchExchangeRates();
@@ -143,7 +141,10 @@ function App() {
 				setAmount={setAmount}
 				error={error}
 			/>
-			<CurrencyExchanges currencies={updatedCurrencyInfo} />
+			<CurrencyExchanges
+				currencies={updatedCurrencyInfo}
+				isLoading={isLoading}
+			/>
 		</>
 	);
 }

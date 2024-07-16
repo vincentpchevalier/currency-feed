@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import Cell from './Cell';
 import Row from './Row';
+import Spinner from './Spinner';
 
-function Table({ data }) {
+function Table({ data, isLoading }) {
 	return (
 		<ul className="table">
 			<Row>
@@ -15,7 +16,9 @@ function Table({ data }) {
 					<Row key={item.code}>
 						<Cell classModifier="">{item.currency}</Cell>
 						<Cell classModifier="">{item.code}</Cell>
-						<Cell classModifier="">{item.exchange}</Cell>
+						<Cell classModifier="">
+							{isLoading ? <Spinner /> : item.exchange}
+						</Cell>
 					</Row>
 				);
 			})}
