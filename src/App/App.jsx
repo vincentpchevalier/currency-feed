@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import CurrencyExchanges from '../components/CurrencyExchanges/CurrencyExchanges';
-import CurrencyInput from '../components/CurrencyInput/CurrencyInput';
+import ExchangeRates from '../components/ExchangeRates/ExchangeRates';
+import UserInput from '../components/UserInput/UserInput';
 
 const COUNTRY_API_URL = 'https://restcountries.com/v3.1/';
 const CURRENCY_API_URL = 'https://api.frankfurter.app/';
@@ -11,7 +11,7 @@ function App() {
 	const [currencyCode, setCurrencyCode] = useState('');
 	const [country, setCountry] = useState('');
 	const [amount, setAmount] = useState('');
-	const [exchangeRates, setExchangeRates] = useState(null);
+	const [rates, setRates] = useState(null);
 	const [updatedCurrencyInfo, setUpdatedCurrencyInfo] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
@@ -115,7 +115,7 @@ function App() {
 					console.log(data.rates);
 
 					timerId = setTimeout(() => {
-						setExchangeRates(data.rates);
+						setRates(data.rates);
 						setIsLoading(false);
 					}, 1000);
 				} catch (err) {
@@ -134,11 +134,11 @@ function App() {
 
 	useEffect(
 		function () {
-			if (!exchangeRates) return;
-			console.log(exchangeRates);
+			if (!rates) return;
+			console.log(rates);
 
 			const updatedCurrencies = currencyInfo.map((curr) => {
-				const exchange = exchangeRates[curr.code] || amount;
+				const exchange = rates[curr.code] || amount;
 				return {
 					...curr,
 					exchange,
@@ -147,13 +147,13 @@ function App() {
 			console.log(updatedCurrencies);
 			setUpdatedCurrencyInfo(updatedCurrencies);
 		},
-		[exchangeRates, currencyInfo, amount]
+		[rates, currencyInfo, amount]
 	);
 
 	return (
 		<>
 			<h1>Current Currencies</h1>
-			<CurrencyInput
+			<UserInput
 				country={country}
 				code={currencyCode}
 				amount={amount}
@@ -161,10 +161,7 @@ function App() {
 				setAmount={setAmount}
 				error={error}
 			/>
-			<CurrencyExchanges
-				currencies={updatedCurrencyInfo}
-				isLoading={isLoading}
-			/>
+			<ExchangeRates currencies={updatedCurrencyInfo} isLoading={isLoading} />
 		</>
 	);
 }

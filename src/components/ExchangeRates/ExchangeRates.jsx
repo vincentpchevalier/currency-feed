@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import Table from '../Table/Table';
 
-function CurrencyExchanges({ currencies, isLoading }) {
+function ExchangeRates({ currencies, isLoading }) {
 	return (
-		<div className="balanceSheetContainer">
+		<div className="exchangeRatesContainer">
 			<h2>Currency Exchange</h2>
 			<Table data={currencies} isLoading={isLoading} />
 		</div>
 	);
 }
-export default CurrencyExchanges;
+export default ExchangeRates;
