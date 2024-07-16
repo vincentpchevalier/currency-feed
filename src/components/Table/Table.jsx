@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import Cell from './Cell';
 import Row from './Row';
-import Spinner from './Spinner';
+import Spinner from '../Utilities/Spinner';
 
 function Table({ data, isLoading }) {
 	return (

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import CurrencyExchanges from './CurrencyExchanges';
-import CurrencyInput from './CurrencyInput';
+import CurrencyExchanges from '../components/CurrencyExchanges/CurrencyExchanges';
+import CurrencyInput from '../components/CurrencyInput/CurrencyInput';
 
 const COUNTRY_API_URL = 'https://restcountries.com/v3.1/';
 const CURRENCY_API_URL = 'https://api.frankfurter.app/';

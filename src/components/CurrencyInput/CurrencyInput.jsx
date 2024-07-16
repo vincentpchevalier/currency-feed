@@ -1,4 +1,4 @@
-import ErrorMessage from './ErrorMessage';
+import ErrorMessage from '../Utilities/ErrorMessage';
 
 /* eslint-disable react/prop-types */
 function CurrencyInput({
