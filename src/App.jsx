@@ -17,10 +17,13 @@ function App() {
 	const [error, setError] = useState('');
 
 	useEffect(function () {
+		const controller = new AbortController();
 		async function fetchCurrencyInfo() {
 			try {
 				setError('');
-				const res = await fetch(`${CURRENCY_API_URL}currencies`);
+				const res = await fetch(`${CURRENCY_API_URL}currencies`, {
+					signal: controller.signal,
+				});
 
 				if (!res.ok)
 					throw new Error('Something went wrong fetching the currency info.');
@@ -36,19 +39,25 @@ function App() {
 				setCurrencyInfo(currData);
 				setUpdatedCurrencyInfo(currData);
 			} catch (err) {
-				setError(err.message);
+				if (err.name !== 'AbortError') setError(err.message);
 			}
 		}
 		fetchCurrencyInfo();
+
+		return () => controller.abort();
 	}, []);
 
 	useEffect(
 		function () {
+			const controller = new AbortController();
+
 			async function fetchCountry() {
 				if (country.length < 3) return; // to make sure not too many calls get made to the API
 				try {
 					setError('');
-					const res = await fetch(`${COUNTRY_API_URL}name/${country}`);
+					const res = await fetch(`${COUNTRY_API_URL}name/${country}`, {
+						signal: controller.signal,
+					});
 
 					console.log(res);
 					console.log(res.status);
@@ -69,10 +78,12 @@ function App() {
 
 					setCurrencyCode(currencyCode);
 				} catch (err) {
-					setError(err.message);
+					if (err.name !== 'AbortError') setError(err.message);
 				}
 			}
 			fetchCountry();
+
+			return () => controller.abort();
 		},
 		[country]
 	);
@@ -80,6 +91,7 @@ function App() {
 	useEffect(
 		function () {
 			let timerId;
+			const controller = new AbortController();
 			async function fetchExchangeRates() {
 				if (!currencyCode || !amount) return;
 				console.log('Fetching exchange rates');
@@ -87,7 +99,8 @@ function App() {
 					setIsLoading(true);
 
 					const res = await fetch(
-						`${CURRENCY_API_URL}latest?amount=${amount}&from=${currencyCode}`
+						`${CURRENCY_API_URL}latest?amount=${amount}&from=${currencyCode}`,
+						{ signal: controller.signal }
 					);
 					console.log(res.status);
 
@@ -106,12 +119,15 @@ function App() {
 						setIsLoading(false);
 					}, 1000);
 				} catch (err) {
-					setError(err.message);
+					if (err.name !== 'AbortError') setError(err.message);
 					setIsLoading(false);
 				}
 			}
 			fetchExchangeRates();
-			return () => clearTimeout(timerId);
+			return function () {
+				clearTimeout(timerId);
+				controller.abort();
+			};
 		},
 		[currencyCode, amount]
 	);
