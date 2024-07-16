@@ -10,7 +10,7 @@
 - only does fetch on submit
 - searches the country API for country currency code
 - fetches exchange info from frankfurter.app
-- shows a list of the base currency against the individual currencies: USD, GBP, EUR, CNY, JPY, CAD, AUD
+- shows a list of the base currency against the individual currencies fetched from the currency api on initial render
 - do the fetch to the currency api on useEffect with currentCountry dependency
 
 - Button with get local currency

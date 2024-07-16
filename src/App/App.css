@@ -1,0 +1,27 @@
+#root {
+	max-width: 85rem;
+	margin: 0 auto;
+	padding: 2rem;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+}
+
+.App {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2rem;
+
+	& h1,
+	& #info {
+		width: 100%;
+	}
+
+	& > *:not(h1) {
+		background-color: rgba(35, 35, 60, 0.471);
+		padding: 1rem 2rem 2rem;
+		border: 0.1rem solid #646cff;
+	}
+}

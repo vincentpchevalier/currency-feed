@@ -1,0 +1,21 @@
+.table {
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr;
+	width: 100%;
+	border: 0.1rem solid #ddd;
+	border-bottom: none;
+}
+
+.row {
+	display: contents;
+}
+
+.cell {
+	padding: 1rem;
+	border-bottom: 0.1rem solid #ddd;
+}
+
+.cell.header {
+	font-weight: bold;
+	background-color: rgba(122, 122, 211, 0.184);
+}

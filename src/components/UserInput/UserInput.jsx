@@ -1,4 +1,7 @@
-function CurrencyInput() {
+import './UserInput.css';
+
+/* eslint-disable react/prop-types */
+function UserInput() {
 	return (
 		<section>
 			<h2>Location and Base Amount</h2>
@@ -16,7 +19,6 @@ function CurrencyInput() {
 						<label htmlFor="amount">Amount</label>
 						<input type="text" name="amount" placeholder="0.00" />
 					</fieldset>
-					<button>Get Exchange</button>
 				</form>
 				<div className="currency">
 					<h3>Currency Info</h3>
@@ -28,4 +30,4 @@ function CurrencyInput() {
 	);
 }
 
-export default CurrencyInput;
+export default UserInput;
