@@ -13,18 +13,19 @@ function App() {
 	const [amount, setAmount] = useState('');
 	const [exchangeRates, setExchangeRates] = useState(null);
 	const [updatedCurrencyInfo, setUpdatedCurrencyInfo] = useState([]);
+	const [isLoading, setIsLoading] = useState('');
+	const [error, setError] = useState('');
 
 	useEffect(function () {
 		async function fetchCurrencyInfo() {
 			try {
+				setError('');
 				const res = await fetch(`${CURRENCY_API_URL}currencies`);
 
 				if (!res.ok)
-					throw new Error('Something went wrong fetching the currencies.');
+					throw new Error('Something went wrong fetching the currency info.');
 
 				const data = await res.json();
-
-				// console.log(data);
 
 				const currData = Object.keys(data).map((key) => ({
 					code: key,
@@ -35,7 +36,7 @@ function App() {
 				setCurrencyInfo(currData);
 				setUpdatedCurrencyInfo(currData);
 			} catch (err) {
-				console.warn(err);
+				setError(err.message);
 			} finally {
 				//
 			}
@@ -48,7 +49,16 @@ function App() {
 			async function fetchCountry() {
 				if (country.length < 3) return; // to make sure not too many calls get made to the API
 				try {
+					setError('');
 					const res = await fetch(`${COUNTRY_API_URL}name/${country}`);
+
+					console.log(res);
+					console.log(res.status);
+
+					if (res.status === 404)
+						throw new Error(
+							`Could not find "${country}." Please check the spelling and try again.`
+						);
 
 					if (!res.ok)
 						throw new Error('Something went wrong with fetching the country.');
@@ -61,7 +71,7 @@ function App() {
 
 					setCurrencyCode(currencyCode);
 				} catch (err) {
-					console.warn(err);
+					setError(err.message);
 				} finally {
 					// setIsLoading()
 				}
@@ -76,19 +86,28 @@ function App() {
 			async function fetchExchangeRates() {
 				if (!currencyCode || !amount) return;
 				console.log('Fetching exchange rates');
+				try {
+					const res = await fetch(
+						`${CURRENCY_API_URL}latest?amount=${amount}&from=${currencyCode}`
+					);
+					console.log(res.status);
 
-				const res = await fetch(
-					`${CURRENCY_API_URL}latest?amount=${amount}&from=${currencyCode}`
-				);
-				const data = await res.json();
-				console.log(data.rates);
-				// const rates = Object.keys(data.rates).map((key) => ({
-				// 	code: key,
-				// 	exchange: data.rates[key],
-				// }));
-				// console.log(rates);
+					if (res.status === 404)
+						throw new Error(
+							`Cannot find the exchange rate for ${currencyCode}`
+						);
 
-				setExchangeRates(data.rates);
+					if (!res.ok) throw new Error('Something went wrong.');
+
+					const data = await res.json();
+					console.log(data.rates);
+
+					setExchangeRates(data.rates);
+				} catch (err) {
+					setError(err.message);
+				} finally {
+					//
+				}
 			}
 			fetchExchangeRates();
 		},
@@ -122,6 +141,7 @@ function App() {
 				amount={amount}
 				setCountry={setCountry}
 				setAmount={setAmount}
+				error={error}
 			/>
 			<CurrencyExchanges currencies={updatedCurrencyInfo} />
 		</>

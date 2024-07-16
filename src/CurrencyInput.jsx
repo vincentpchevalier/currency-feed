@@ -1,5 +1,14 @@
+import ErrorMessage from './ErrorMessage';
+
 /* eslint-disable react/prop-types */
-function CurrencyInput({ amount, country, code, setCountry, setAmount }) {
+function CurrencyInput({
+	amount,
+	country,
+	code,
+	setCountry,
+	setAmount,
+	error,
+}) {
 	return (
 		<section>
 			<h2>Location and Base Amount</h2>
@@ -27,9 +36,14 @@ function CurrencyInput({ amount, country, code, setCountry, setAmount }) {
 					</fieldset>
 				</form>
 				<div className="currency">
-					<h3>Currency Info</h3>
-					<p>Country: {country}</p>
-					<p>Currency: {code}</p>
+					{!error && (
+						<>
+							<h3>Currency Info</h3>
+							<p>Country: {country}</p>
+							<p>Currency: {code}</p>
+						</>
+					)}
+					{error && <ErrorMessage message={error} />}
 				</div>
 			</div>
 		</section>
