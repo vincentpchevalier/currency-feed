@@ -1,14 +1,8 @@
 import ErrorMessage from '../Utilities/ErrorMessage';
+import './UserInput.css';
 
 /* eslint-disable react/prop-types */
-function CurrencyInput({
-	amount,
-	country,
-	code,
-	setCountry,
-	setAmount,
-	error,
-}) {
+function UserInput({ amount, country, code, setCountry, setAmount, error }) {
 	return (
 		<section>
 			<h2>Location and Base Amount</h2>
@@ -50,4 +44,4 @@ function CurrencyInput({
 	);
 }
 
-export default CurrencyInput;
+export default UserInput;

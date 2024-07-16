@@ -1,0 +1,47 @@
+.info {
+	display: flex;
+	gap: 2rem;
+
+	& > * {
+		margin: 0;
+	}
+
+	& h2 {
+		flex-grow: 1;
+	}
+
+	& .currency {
+		padding: 0 1rem;
+		border: 0.1rem solid #ddd;
+		border-radius: 1rem;
+		flex-basis: 10rem;
+	}
+}
+
+.info .form {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+	gap: 1.5rem;
+	flex-basis: 20rem;
+
+	& fieldset {
+		display: flex;
+		flex-direction: column;
+		justify-content: stretch;
+		align-items: stretch;
+		border: none;
+		gap: 0.5rem;
+		padding: 0;
+
+		& > * {
+			flex-grow: 2;
+		}
+	}
+}
+
+input,
+select {
+	padding: 0.75rem 0.5rem;
+}

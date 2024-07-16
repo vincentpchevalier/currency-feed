@@ -2,6 +2,7 @@
 import Cell from './Cell';
 import Row from './Row';
 import Spinner from '../Utilities/Spinner';
+import './Table.css';
 
 function Table({ data, isLoading }) {
 	return (

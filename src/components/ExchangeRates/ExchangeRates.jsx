@@ -1,3 +1,5 @@
+import './ExchangeRates.css';
+
 /* eslint-disable react/prop-types */
 import Table from '../Table/Table';
 
