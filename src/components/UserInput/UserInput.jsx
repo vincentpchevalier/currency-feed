@@ -1,8 +1,7 @@
-import ErrorMessage from '../Utilities/ErrorMessage';
 import './UserInput.css';
 
 /* eslint-disable react/prop-types */
-function UserInput({ amount, country, code, setCountry, setAmount, error }) {
+function UserInput() {
 	return (
 		<section>
 			<h2>Location and Base Amount</h2>
@@ -14,30 +13,17 @@ function UserInput({ amount, country, code, setCountry, setAmount, error }) {
 							type="text"
 							name="country"
 							placeholder="What country are you in?"
-							value={country}
-							onChange={(ev) => setCountry(ev.target.value)}
 						/>
 					</fieldset>
 					<fieldset>
 						<label htmlFor="amount">Amount</label>
-						<input
-							type="text"
-							name="amount"
-							placeholder="0.00"
-							value={amount}
-							onChange={(ev) => setAmount(+ev.target.value)}
-						/>
+						<input type="text" name="amount" placeholder="0.00" />
 					</fieldset>
 				</form>
 				<div className="currency">
-					{!error && (
-						<>
-							<h3>Currency Info</h3>
-							<p>Country: {country}</p>
-							<p>Currency: {code}</p>
-						</>
-					)}
-					{error && <ErrorMessage message={error} />}
+					<h3>Currency Info</h3>
+					<p>Country: Canada</p>
+					<p>Currency: CAD</p>
 				</div>
 			</div>
 		</section>

@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import Cell from './Cell';
 import Row from './Row';
-import Spinner from '../Utilities/Spinner';
+
 import './Table.css';
 
-function Table({ data, isLoading }) {
+function Table() {
 	return (
 		<ul className="table">
 			<Row>
@@ -12,17 +12,12 @@ function Table({ data, isLoading }) {
 				<Cell classModifier="header">Code</Cell>
 				<Cell classModifier="header">Value</Cell>
 			</Row>
-			{data.map((item) => {
-				return (
-					<Row key={item.code}>
-						<Cell classModifier="">{item.currency}</Cell>
-						<Cell classModifier="">{item.code}</Cell>
-						<Cell classModifier="">
-							{isLoading ? <Spinner /> : item.exchange}
-						</Cell>
-					</Row>
-				);
-			})}
+
+			<Row key={0}>
+				<Cell classModifier="">Canadian Dollar</Cell>
+				<Cell classModifier="">CAD</Cell>
+				<Cell classModifier="">0.00</Cell>
+			</Row>
 		</ul>
 	);
 }
