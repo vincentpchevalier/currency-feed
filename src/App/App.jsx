@@ -8,11 +8,10 @@ const CURRENCY_API_URL = 'https://api.frankfurter.app/';
 
 function App() {
 	const [currencyInfo, setCurrencyInfo] = useState([]);
-	const [userInput, setUserInput] = useState({});
+	const [userInput, setUserInput] = useState(null);
 	const [currencyCode, setCurrencyCode] = useState('');
 	const [rates, setRates] = useState(null);
 	const [errorMsg, setErrorMsg] = useState('');
-	const [updatedInfo, setUpdatedInfo] = useState([]);
 
 	function handleUserInput(info) {
 		// console.log('user info: ', info);
@@ -52,11 +51,12 @@ function App() {
 	useEffect(
 		function () {
 			console.log('useEffect - userInput dependency');
-			// console.log(userInput);
-			// console.log(userInput.country);
+			async function fetchRatesData() {
+				if (!userInput) return;
 
-			async function fetchCountry() {
-				if (!userInput.country || userInput.length < 3) return;
+				const { country, amount } = userInput;
+
+				if (!country || country.length < 3) return; // guard clause
 
 				try {
 					setErrorMsg('');
@@ -78,54 +78,43 @@ function App() {
 					const code = Object.keys(data[0].currencies)[0];
 					console.log(code);
 					setCurrencyCode(code);
+
+					if (currencyCode) {
+						const res = await fetch(
+							`${CURRENCY_API_URL}latest?amount=${amount}&from=${currencyCode}`
+						);
+						if (!res.ok) throw new Error('Something went wrong.');
+
+						const data = await res.json();
+						console.log(data.rates);
+						setRates(data.rates);
+					}
 				} catch (err) {
 					// console.warn(err);
 					setErrorMsg(err.message);
 				}
 			}
-			fetchCountry();
+			fetchRatesData();
 		},
-		[userInput]
+		[userInput, currencyCode]
 	);
 
 	useEffect(
 		function () {
-			async function fetchExchangeRates() {
-				const { amount } = userInput;
-				if (!currencyCode) return;
-				try {
-					const res = await fetch(
-						`${CURRENCY_API_URL}latest?amount=${amount}&from=${currencyCode}`
-					);
-					if (!res.ok) throw new Error('Something went wrong.');
+			console.log('useEffect - userInput dependency');
 
-					const data = await res.json();
-					console.log(data.rates);
-					setRates(data.rates);
-				} catch (err) {
-					//
-				}
-			}
-			fetchExchangeRates();
-		},
-		[currencyCode, userInput]
-	);
-
-	useEffect(
-		function () {
+			if (!userInput) return;
 			const { amount } = userInput;
 			if (!rates) return;
-			const updateCurrencies = currencyInfo.map((curr) => {
-				const exchange = rates[curr.code] || amount;
-				return {
-					...curr,
-					exchange,
-				};
-			});
-			console.log(updateCurrencies);
-			setUpdatedInfo(updateCurrencies);
+
+			setCurrencyInfo((prevInfo) =>
+				prevInfo.map((curr) => {
+					const exchange = rates[curr.code] || amount;
+					return { ...curr, exchange };
+				})
+			);
 		},
-		[rates, userInput, currencyInfo]
+		[rates, userInput]
 	);
 
 	return (
@@ -136,7 +125,7 @@ function App() {
 				currencyCode={currencyCode}
 				errorMsg={errorMsg}
 			/>
-			<ExchangeRates currencyInfo={updatedInfo} />
+			<ExchangeRates currencyInfo={currencyInfo} />
 		</>
 	);
 }
